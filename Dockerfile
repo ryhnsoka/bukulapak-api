@@ -23,7 +23,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
     && mkdir -p storage/framework/{sessions,views,cache} storage/logs public/uploads \
     && chown -R www-data:www-data storage bootstrap/cache public/uploads
 
-EXPOSE 80
+EXPOSE 80 10000
 
-# Migrasi otomatis tiap deploy, lalu jalankan Apache
-CMD php artisan migrate --force && apache2-foreground
+# Migrasi otomatis tiap deploy, lalu jalankan server Laravel di port Render ($PORT)
+CMD sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"
